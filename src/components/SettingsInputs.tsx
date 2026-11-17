@@ -18,7 +18,7 @@ export function createDefaultSettings(defaultProfile: string): AppSettings {
     schemaVersion: 1,
     defaultProfile,
     displayStrategy: "smart",
-    clickThrough: true,
+    clickThrough: false,
     opacity: 97,
     fontSize: 13,
     overlayWidth: 420,

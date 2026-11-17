@@ -1,6 +1,6 @@
 [package]
 name = "lazykeys"
-version = "0.1.0"
+version = "0.1.1"
 description = "A lightweight LazyVim command companion for macOS"
 authors = ["0H <bits12@163.com>"]
 license = "MIT"

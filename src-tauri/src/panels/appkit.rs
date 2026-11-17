@@ -6,7 +6,8 @@ use objc2::rc::Retained;
 use objc2::runtime::{AnyObject, ProtocolObject, Sel};
 use objc2::{DefinedClass, MainThreadOnly, define_class, msg_send, sel};
 use objc2_app_kit::{
-    NSAccessibility, NSAlert, NSAlertFirstButtonReturn, NSApplication,
+    NSAccessibility, NSAlert, NSAlertFirstButtonReturn,
+    NSAnimatablePropertyContainer, NSAnimationContext, NSApplication,
     NSBackingStoreType, NSButton, NSColor, NSControl,
     NSControlTextEditingDelegate, NSFloatingWindowLevel, NSFont,
     NSLayoutAttribute, NSNormalWindowLevel, NSPanel, NSPasteboard,
@@ -16,10 +17,12 @@ use objc2_app_kit::{
     NSUserInterfaceLayoutOrientation, NSVisualEffectBlendingMode,
     NSVisualEffectMaterial, NSVisualEffectState, NSVisualEffectView,
     NSWindowCollectionBehavior, NSWindowDelegate, NSWindowStyleMask,
+    NSWorkspace,
 };
 use objc2_foundation::{
     MainThreadMarker, NSIndexSet, NSInteger, NSNotification, NSObject,
-    NSObjectProtocol, NSPoint, NSRect, NSSize, NSString, ns_string,
+    NSObjectNSDelayedPerforming, NSObjectProtocol, NSPoint, NSRect, NSSize,
+    NSString, ns_string,
 };
 
 use crate::models::{
@@ -106,6 +109,16 @@ define_class!(
         #[unsafe(method(closeQuery:))]
         fn close_query(&self, _sender: Option<&AnyObject>) {
             emit(PanelAction::CloseQuery);
+        }
+
+        /// 被动浮窗关闭出口｜直接收起当前面板，不覆盖用户的显示策略。
+        #[unsafe(method(hidePassive:))]
+        fn hide_passive(&self, _sender: Option<&AnyObject>) {
+            REGISTRY.with(|registry| {
+                if let Some(registry) = registry.borrow().as_ref() {
+                    hide_panel(&registry.passive);
+                }
+            });
         }
     }
 
@@ -413,8 +426,8 @@ pub fn initialize(action_sender: Sender<PanelAction>) -> Result<(), String> {
         if registry.borrow().is_some() {
             return Ok(());
         }
-        let passive = build_passive(mtm);
         let controller = PanelController::new(mtm);
+        let passive = build_passive(mtm, &controller);
         let query = build_query(mtm, &controller);
         passive.panel.setMovable(true);
         passive.panel.setMovableByWindowBackground(true);
@@ -567,14 +580,17 @@ fn vertical_stack(
     stack
 }
 
-/// 被动展示链路装配｜组合鼠标穿透的浮窗与状态文本，并立即显示。
-fn build_passive(mtm: MainThreadMarker) -> PassiveViews {
+/// 被动展示链路装配｜组合浮窗与状态文本，初始隐藏，只有有效内容或明确唤起才出现。
+fn build_passive(
+    mtm: MainThreadMarker,
+    controller: &Retained<PanelController>,
+) -> PassiveViews {
     let width = 420.0;
     let height = 190.0;
     let panel = panel(mtm, width, height, PanelInteraction::ClickThrough);
     let background = background(mtm, width, height);
     let stack = vertical_stack(mtm, width, height);
-    let status = label(mtm, "等待 Neovim 连接", 12.0, TextWeight::Bold);
+    let status = label(mtm, "还没有 Neovim 会话", 12.0, TextWeight::Bold);
     let pending = label(mtm, "LazyKeys", 22.0, TextWeight::Bold);
     let semantic = label(
         mtm,
@@ -588,8 +604,26 @@ fn build_passive(mtm: MainThreadMarker) -> PassiveViews {
         stack.addArrangedSubview(view);
     }
     background.addSubview(&stack);
+    let close_button = unsafe {
+        NSButton::buttonWithTitle_target_action(
+            ns_string!("×"),
+            Some(controller),
+            Some(sel!(hidePassive:)),
+            mtm,
+        )
+    };
+    close_button.setFrame(NSRect::new(
+        NSPoint::new(width - 34.0, height - 34.0),
+        NSSize::new(24.0, 24.0),
+    ));
+    close_button.setBordered(false);
+    close_button.setFont(Some(&NSFont::systemFontOfSize(15.0)));
+    close_button.setContentTintColor(Some(&NSColor::secondaryLabelColor()));
+    close_button.setAccessibilityLabel(Some(ns_string!("隐藏浮窗")));
+    close_button.setToolTip(Some(ns_string!("隐藏浮窗")));
+    background.addSubview(&close_button);
     panel.setContentView(Some(&background));
-    panel.orderFront(None);
+    panel.orderOut(None);
     PassiveViews {
         panel,
         status,
@@ -987,6 +1021,67 @@ fn apply_font_settings(registry: &PanelRegistry, settings: &AppSettings) {
     }
 }
 
+/// 系统减少动态效果偏好直接决定原生面板是否跳过动画。
+fn reduce_motion() -> bool {
+    NSWorkspace::sharedWorkspace().accessibilityDisplayShouldReduceMotion()
+}
+
+/// 面板显示使用轻微淡入，已有可见面板不因设置刷新重复播放动画。
+fn show_panel(panel: &NSPanel, opacity: f64) {
+    unsafe { NSObject::cancelPreviousPerformRequestsWithTarget(panel) };
+    if panel.isVisible() && panel.alphaValue() == opacity {
+        return;
+    }
+    if reduce_motion() {
+        panel.setAlphaValue(opacity);
+        panel.orderFront(None);
+        return;
+    }
+    panel.setAlphaValue(0.0);
+    panel.orderFront(None);
+    NSAnimationContext::currentContext().setDuration(0.22);
+    panel.animator().setAlphaValue(opacity);
+}
+
+/// 面板退出在淡出完成后收起，避免无动画的突兀消失。
+fn hide_panel(panel: &NSPanel) {
+    unsafe { NSObject::cancelPreviousPerformRequestsWithTarget(panel) };
+    if !panel.isVisible() {
+        return;
+    }
+    if reduce_motion() {
+        panel.orderOut(None);
+        return;
+    }
+    NSAnimationContext::currentContext().setDuration(0.22);
+    panel.animator().setAlphaValue(0.0);
+    unsafe {
+        panel.performSelector_withObject_afterDelay(sel!(orderOut:), None, 0.22)
+    };
+}
+
+/// 显示策略和会话状态共同决定浮窗是否值得占据屏幕。
+fn passive_should_be_visible(settings: &AppSettings, session_id: &str) -> bool {
+    settings.display_strategy != "shortcut"
+        && (settings.display_strategy == "always" || !session_id.is_empty())
+}
+
+/// 被动浮窗只在有内容或被明确唤起时显示，不再常驻等待状态。
+fn sync_passive_visibility(registry: &PanelRegistry) {
+    let settings = registry.settings.borrow().clone();
+    let session_id = registry
+        .snapshot
+        .borrow()
+        .as_ref()
+        .map(|snapshot| snapshot.session_id.clone())
+        .unwrap_or_default();
+    if passive_should_be_visible(&settings, &session_id) {
+        show_panel(&registry.passive, f64::from(settings.opacity) / 100.0);
+    } else {
+        hide_panel(&registry.passive);
+    }
+}
+
 /// 设置刷新链路｜应用浮窗外观、位置和显隐，再用缓存快照重建内容并刷新风险详情。
 pub fn apply_settings(settings: &AppSettings) {
     let snapshot = REGISTRY.with(|registry| {
@@ -1000,11 +1095,7 @@ pub fn apply_settings(settings: &AppSettings) {
             format_shortcut(&settings.query_shortcut),
             format_shortcut(&settings.overlay_shortcut)
         )));
-        if settings.display_strategy == "shortcut" {
-            registry.passive.orderOut(None);
-        } else {
-            registry.passive.orderFront(None);
-        }
+        sync_passive_visibility(registry);
         registry.controller.update_detail();
         registry.snapshot.borrow().clone()
     });
@@ -1020,7 +1111,7 @@ fn update_disconnected_passive(registry: &PanelRegistry) {
         .setStringValue(ns_string!("目标：等待 Neovim 连接"));
     registry
         .status
-        .setStringValue(ns_string!("等待 Neovim 连接"));
+        .setStringValue(ns_string!("还没有 Neovim 会话"));
     registry.pending.setStringValue(ns_string!("LazyKeys"));
     registry
         .semantic
@@ -1114,7 +1205,7 @@ pub fn update_passive(snapshot: PanelSnapshot) {
         } else {
             update_connected_passive(registry, &snapshot);
         }
-        registry.passive.display();
+        sync_passive_visibility(registry);
     });
 }
 
@@ -1154,6 +1245,7 @@ pub fn show_query() {
     REGISTRY.with(|registry| {
         if let Some(registry) = registry.borrow().as_ref() {
             registry.query.center();
+            show_panel(&registry.query, 0.97);
             registry.query.makeKeyAndOrderFront(None);
             registry
                 .query
@@ -1169,7 +1261,7 @@ pub fn show_query() {
 pub fn hide_query() {
     REGISTRY.with(|registry| {
         if let Some(registry) = registry.borrow().as_ref() {
-            registry.query.orderOut(None);
+            hide_panel(&registry.query);
         }
     });
 }
@@ -1178,8 +1270,8 @@ pub fn hide_query() {
 pub fn center_passive() {
     REGISTRY.with(|registry| {
         if let Some(registry) = registry.borrow().as_ref() {
-            registry.passive.orderFront(None);
             registry.passive.center();
+            show_panel(&registry.passive, 0.97);
         }
     });
 }
@@ -1189,9 +1281,9 @@ pub fn toggle_passive() {
     REGISTRY.with(|registry| {
         if let Some(registry) = registry.borrow().as_ref() {
             if registry.passive.isVisible() {
-                registry.passive.orderOut(None);
+                hide_panel(&registry.passive);
             } else {
-                registry.passive.orderFront(None);
+                show_panel(&registry.passive, 0.97);
             }
         }
     });
@@ -1263,6 +1355,24 @@ pub fn confirm_command(command: &CommandItem, target: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn passive_waits_for_content_or_explicit_display() {
+        let settings = AppSettings::default();
+        assert!(!passive_should_be_visible(&settings, ""));
+        assert!(passive_should_be_visible(&settings, "session-1"));
+        let always = AppSettings {
+            display_strategy: "always".into(),
+            ..Default::default()
+        };
+        assert!(passive_should_be_visible(&always, ""));
+        let shortcut_only = AppSettings {
+            display_strategy: "shortcut".into(),
+            ..Default::default()
+        };
+        assert!(!passive_should_be_visible(&shortcut_only, "session-1"));
+        assert!(!settings.click_through);
+    }
 
     #[test]
     fn formats_shortcuts_for_display() {

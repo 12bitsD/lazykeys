@@ -29,7 +29,7 @@ _Learn LazyVim in context: Chinese command search, a non-intrusive overlay, and 
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/assets/icons/context.svg" width="24" height="24" alt=""> <strong>看懂当前操作现场</strong><br>跟随 Neovim 模式、未完成前缀和插件页面，显示下一步、退出方式与分段助记；浮窗不抢焦点，支持置顶和鼠标穿透。</td>
+    <td width="50%"><img src="docs/assets/icons/context.svg" width="24" height="24" alt=""> <strong>看懂当前操作现场</strong><br>跟随 Neovim 模式、未完成前缀和插件页面，显示下一步、退出方式与分段助记；无会话时自动隐藏，可拖动、关闭，也支持置顶和鼠标穿透。</td>
     <td width="50%"><img src="docs/assets/icons/search.svg" width="24" height="24" alt=""> <strong>用中文查命令</strong><br>按功能、真实按键、别名或助记搜索，查看用途、模式、结果与副作用；可为内置命令保存自己的中文别名和助记。</td>
   </tr>
   <tr>
@@ -50,7 +50,7 @@ _Learn LazyVim in context: Chinese command search, a non-intrusive overlay, and 
 2. **回到 Neovim 输入前缀**，例如按下 `<leader>` 后稍停。浮窗会跟随当前上下文；也可以随时打开主窗口的“命令词典”。
 3. 按 **`Control + Option + K`** 打开查询面板，输入“查找文件”“保存”“退出”等中文、按键或自己的别名。
 4. 选择命令后**复制按键说明**，或点击“执行到当前 Neovim”。涉及修改或破坏性操作时，先阅读目标与风险提示。
-5. 按 **`Control + Option + J`** 显示或隐藏被动浮窗；两个快捷键都能在“设置”中修改。
+5. 按 **`Control + Option + J`** 显示或隐藏被动浮窗；也可以直接拖动，或点击浮窗右上角的 **×** 关闭。两个快捷键都能在“设置”中修改。
 
 首次准备环境需要联网。应用优先使用合格的系统 Neovim；缺少或版本过旧时，会下载并校验官方 arm64 构建。Profile 配置和受管工具分别位于 `~/.config/lazykeys` 与 `~/.local/share/lazykeys`。
 
@@ -88,7 +88,7 @@ cargo test --manifest-path src-tauri/Cargo.toml --locked
 
 ```bash
 npm run tauri build -- --target aarch64-apple-darwin
-bash scripts/package-macos.sh 0.1.0
+bash scripts/package-macos.sh 0.1.1
 ```
 
 品牌源文件使用纯 HTML/CSS，位于 `docs/assets/lazykeys-logo.html`；`scripts/generate_brand_assets.py` 使用 Pillow 为渲染结果添加可复现的手绘装饰，不参与 App 构建。看板娘与功能图标保留为可编辑 SVG，位于 `docs/assets/lazykeys-mascot.svg` 和 `docs/assets/icons/`。
@@ -98,8 +98,8 @@ bash scripts/package-macos.sh 0.1.0
 版本号需与 `package.json`、`src-tauri/Cargo.toml` 和 `src-tauri/tauri.conf.json` 保持一致。推送语义化版本标签后，GitHub Actions 会构建 App、校验产物并发布 DMG、App ZIP 与 `SHA256SUMS.txt`：
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 ## License

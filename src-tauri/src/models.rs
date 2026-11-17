@@ -223,7 +223,7 @@ impl Default for AppSettings {
             schema_version: 1,
             default_profile: "default".into(),
             display_strategy: "smart".into(),
-            click_through: true,
+            click_through: false,
             opacity: 97,
             font_size: 13,
             overlay_width: 420,

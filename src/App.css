@@ -17,6 +17,9 @@
   --blue: #8bb9e8;
   --danger: #e59186;
   --mono: "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+  --ease-standard: cubic-bezier(.16,1,.3,1);
+  --duration-fast: 150ms;
+  --duration-section: 240ms;
 }
 
 * {
@@ -769,8 +772,8 @@ kbd {
   *::before,
   *::after {
     scroll-behavior: auto !important;
-    transition: none !important;
     animation: none !important;
+    transform: none !important;
   }
 }
 
@@ -1254,5 +1257,127 @@ kbd {
 @media (max-width: 960px) {
   .maintenance-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+
+.connection-hero .overlay-note {
+  margin-top: -12px;
+  color: var(--blue);
+  font-size: 11px;
+}
+
+.primary,
+.secondary,
+.danger,
+.nav-item,
+.candidate,
+.icon-button {
+  transition:
+    background-color var(--duration-fast) ease-out,
+    border-color var(--duration-fast) ease-out,
+    color var(--duration-fast) ease-out,
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.primary:hover:not(:disabled),
+.secondary:hover:not(:disabled),
+.danger:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.primary:active:not(:disabled),
+.secondary:active:not(:disabled),
+.danger:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.nav-item:hover:not(:disabled),
+.candidate:hover:not(:disabled) {
+  transform: translateX(2px);
+}
+
+.nav-item:active:not(:disabled),
+.candidate:active:not(:disabled),
+.candidate.selected {
+  transform: translateX(0);
+}
+
+.icon-button:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.query-panel,
+.command-detail,
+.profile-card,
+.dependency-list,
+.privacy-note,
+.connection-hero,
+.setting-row {
+  transition:
+    border-color var(--duration-fast) ease-out,
+    background-color var(--duration-fast) ease-out;
+}
+
+.query-panel:hover,
+.command-detail:hover,
+.profile-card:hover,
+.dependency-list:hover,
+.privacy-note:hover {
+  border-color: #4b5046;
+}
+
+.setting-row:hover {
+  background: #ffffff04;
+}
+
+summary {
+  transition: color var(--duration-fast) ease-out;
+}
+
+summary:hover {
+  color: var(--accent);
+}
+
+input,
+select {
+  transition:
+    border-color var(--duration-fast) ease-out,
+    box-shadow var(--duration-fast) ease-out,
+    background-color var(--duration-fast) ease-out;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .connection-section,
+  .command-workspace,
+  .environment-section,
+  .settings-section {
+    animation: section-enter var(--duration-section) var(--ease-standard) both;
+  }
+
+  .notice {
+    animation: notice-enter 200ms var(--ease-standard) both;
+  }
+}
+
+@keyframes section-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes notice-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

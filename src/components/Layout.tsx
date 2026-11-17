@@ -76,12 +76,14 @@ export function Topbar({ tab, settings, onError }: {
         <button
           className="secondary"
           onClick={() => api.toggleOverlay().catch(onError)}
+          title="显示或隐藏被动浮窗，可拖动和关闭"
         >
           切换浮窗
         </button>
         <button
           className="secondary"
           onClick={() => api.showQueryPanel().catch(onError)}
+          title="用中文、别名或真实按键查询命令"
         >
           查询命令 <kbd>{formatShortcut(shortcut)}</kbd>
         </button>

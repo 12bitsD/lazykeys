@@ -53,7 +53,7 @@ function connectionDescription(
   settings: AppSettings | null,
 ) {
   if (!context.sessionId) {
-    return "安装并启动一个受管 Profile，浮窗就会跟随当前命令。";
+    return "先启动一个受管 Profile。智能浮窗只会在有上下文时出现，不会常驻占屏。";
   }
   const directory = settings?.includeCwd ?? true
     ? `${context.cwd || "当前目录"} · `
@@ -105,6 +105,7 @@ function ConnectionHero({ context, settings, actions }: ConnectionProps) {
       </div>
       <h2>{connected ? context.title : "先连接一个 LazyVim 环境"}</h2>
       <p>{connectionDescription(context, settings)}</p>
+      <p className="overlay-note">浮窗可拖动，也可随时关闭；查询与显隐都有快捷键。</p>
       <div className="hero-actions">
         <ConnectionActionsView
           status={connected ? "connected" : "disconnected"}
