@@ -75,6 +75,7 @@ jobs:
         with:
           pattern: macos-arm64-*
           path: release
+          merge-multiple: true
       - run: cd release && sha256sum -c SHA256SUMS.txt
       - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:

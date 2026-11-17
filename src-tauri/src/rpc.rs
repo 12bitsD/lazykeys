@@ -147,7 +147,9 @@ impl NvimConnection {
         let mut writer = lock_writer(&self.writer, deadline)?;
         writer
             .set_write_timeout(Some(
-                deadline.saturating_duration_since(Instant::now()),
+                deadline
+                    .saturating_duration_since(Instant::now())
+                    .max(Duration::from_millis(1)),
             ))
             .map_err(|error| format!("设置 Neovim 写超时失败：{error}"))?;
         writer
