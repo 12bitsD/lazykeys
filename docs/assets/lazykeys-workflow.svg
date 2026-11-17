@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 260" role="img" aria-labelledby="workflow-title workflow-desc">
+  <title id="workflow-title">LazyKeys 四步使用流程</title>
+  <desc id="workflow-desc">启动受管环境，输入命令前缀，用中文查询，再复制按键或确认执行。</desc>
+  <defs>
+    <linearGradient id="lk-panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#20241d"/>
+      <stop offset="0.52" stop-color="#171817"/>
+      <stop offset="1" stop-color="#121411"/>
+    </linearGradient>
+    <linearGradient id="lk-key" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3c4436"/>
+      <stop offset="0.42" stop-color="#2c3229"/>
+      <stop offset="0.78" stop-color="#242921"/>
+      <stop offset="1" stop-color="#1b2019"/>
+    </linearGradient>
+    <linearGradient id="lk-green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4b5e3d"/>
+      <stop offset="0.46" stop-color="#35472b"/>
+      <stop offset="1" stop-color="#25331e"/>
+    </linearGradient>
+    <linearGradient id="lk-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8bb9e8" stop-opacity="0.12"/>
+      <stop offset="0.5" stop-color="#8bb9e8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#a6d189" stop-opacity="0.12"/>
+    </linearGradient>
+    <filter id="lk-shadow" x="-25%" y="-25%" width="150%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset in="blur" dx="0" dy="5" result="offset"/>
+      <feFlood flood-color="#071008" flood-opacity="0.42"/>
+      <feComposite in2="offset" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <g id="background">
+    <rect x="1" y="1" width="1118" height="258" rx="23" fill="url(#lk-panel)" stroke="#3b3d37"/>
+    <path d="M26 31 Q123 9 223 25" fill="none" stroke="#a6d189" stroke-opacity="0.16" stroke-width="2" stroke-linecap="round"/>
+    <path d="M912 231 Q1000 244 1088 226" fill="none" stroke="#8bb9e8" stroke-opacity="0.14" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <g id="connector-1" fill="none" stroke="#6f7d65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M243 88 H292" stroke-dasharray="2 7"/>
+    <path d="m282 79 11 9-11 9" stroke="#a6d189"/>
+  </g>
+  <g id="connector-2" fill="none" stroke="#6f7d65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M523 88 H572" stroke-dasharray="2 7"/>
+    <path d="m562 79 11 9-11 9" stroke="#a6d189"/>
+  </g>
+  <g id="connector-3" fill="none" stroke="#6f7d65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M803 88 H852" stroke-dasharray="2 7"/>
+    <path d="m842 79 11 9-11 9" stroke="#a6d189"/>
+  </g>
+
+  <g id="step-install">
+    <text x="64" y="32" fill="#7f8975" font-family="SF Mono, Menlo, monospace" font-size="12" letter-spacing="1.6">01 / LAUNCH</text>
+    <g filter="url(#lk-shadow)">
+      <rect x="106" y="48" width="68" height="68" rx="16" fill="#11160f"/>
+      <rect x="106" y="43" width="68" height="68" rx="16" fill="url(#lk-green)" stroke="#687a58"/>
+      <rect x="111" y="48" width="58" height="58" rx="12" fill="none" stroke="#d8e9c5" stroke-opacity="0.18"/>
+      <path d="M115 49 Q138 38 163 49" fill="none" stroke="#d8e9c5" stroke-opacity="0.38" stroke-linecap="round"/>
+      <path d="m123 64 9 8-9 8M139 81h15" fill="none" stroke="#c3dfaa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="140" y="158" fill="#ecebe4" font-family="Avenir Next, Futura, sans-serif" font-size="23" font-weight="600" text-anchor="middle">启动环境</text>
+    <text x="140" y="187" fill="#a2a69a" font-family="SF Mono, Menlo, monospace" font-size="13" text-anchor="middle">LazyVim Profile</text>
+  </g>
+
+  <g id="step-prefix">
+    <text x="344" y="32" fill="#7f8975" font-family="SF Mono, Menlo, monospace" font-size="12" letter-spacing="1.6">02 / PREFIX</text>
+    <g filter="url(#lk-shadow)">
+      <rect x="386" y="48" width="68" height="68" rx="16" fill="#11160f"/>
+      <rect x="386" y="43" width="68" height="68" rx="16" fill="url(#lk-key)" stroke="#66715d"/>
+      <rect x="391" y="48" width="58" height="58" rx="12" fill="none" stroke="#e2e9d9" stroke-opacity="0.15"/>
+      <path d="M395 49 Q418 38 443 49" fill="none" stroke="#e2e9d9" stroke-opacity="0.34" stroke-linecap="round"/>
+      <text x="420" y="84" fill="#ecebe4" font-family="SF Mono, Menlo, monospace" font-size="13" font-weight="500" text-anchor="middle">&lt;leader&gt;</text>
+    </g>
+    <text x="420" y="158" fill="#ecebe4" font-family="Avenir Next, Futura, sans-serif" font-size="23" font-weight="600" text-anchor="middle">输入前缀</text>
+    <text x="420" y="187" fill="#a2a69a" font-family="SF Mono, Menlo, monospace" font-size="13" text-anchor="middle">让现场自己展开</text>
+  </g>
+
+  <g id="step-query">
+    <text x="624" y="32" fill="#7f8975" font-family="SF Mono, Menlo, monospace" font-size="12" letter-spacing="1.6">03 / QUERY</text>
+    <g filter="url(#lk-shadow)">
+      <rect x="666" y="48" width="68" height="68" rx="16" fill="#11160f"/>
+      <rect x="666" y="43" width="68" height="68" rx="16" fill="url(#lk-green)" stroke="#687a58"/>
+      <rect x="671" y="48" width="58" height="58" rx="12" fill="none" stroke="#d8e9c5" stroke-opacity="0.18"/>
+      <path d="M675 49 Q698 38 723 49" fill="none" stroke="#d8e9c5" stroke-opacity="0.38" stroke-linecap="round"/>
+      <circle cx="696" cy="71" r="10" fill="none" stroke="#c3dfaa" stroke-width="3"/>
+      <path d="m704 79 10 10" fill="none" stroke="#c3dfaa" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="700" y="158" fill="#ecebe4" font-family="Avenir Next, Futura, sans-serif" font-size="23" font-weight="600" text-anchor="middle">中文查询</text>
+    <text x="700" y="187" fill="#8bb9e8" font-family="SF Mono, Menlo, monospace" font-size="14" text-anchor="middle">⌃ ⌥ K</text>
+  </g>
+
+  <g id="step-execute">
+    <text x="904" y="32" fill="#7f8975" font-family="SF Mono, Menlo, monospace" font-size="12" letter-spacing="1.6">04 / ACT</text>
+    <g filter="url(#lk-shadow)">
+      <rect x="946" y="48" width="68" height="68" rx="16" fill="#11160f"/>
+      <rect x="946" y="43" width="68" height="68" rx="16" fill="url(#lk-key)" stroke="#66715d"/>
+      <rect x="951" y="48" width="58" height="58" rx="12" fill="none" stroke="#e2e9d9" stroke-opacity="0.15"/>
+      <path d="M955 49 Q978 38 1003 49" fill="none" stroke="#e2e9d9" stroke-opacity="0.34" stroke-linecap="round"/>
+      <path d="m964 75 9 9 20-22" fill="none" stroke="#a6d189" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="980" y="158" fill="#ecebe4" font-family="Avenir Next, Futura, sans-serif" font-size="22" font-weight="600" text-anchor="middle">复制 / 执行</text>
+    <text x="980" y="187" fill="#a2a69a" font-family="SF Mono, Menlo, monospace" font-size="13" text-anchor="middle">先看风险，再下键</text>
+  </g>
+
+  <g id="ornaments" fill="none" stroke-linecap="round">
+    <path d="M415 224 Q524 230 635 224 T819 224" stroke="url(#lk-line)" stroke-width="2"/>
+    <path d="m814 219 10 5-10 5" stroke="#8bb9e8" stroke-opacity="0.65" stroke-width="1.5"/>
+    <path d="M72 214v8m-4-4h8M1042 46v10m-5-5h10" stroke="#a6d189" stroke-opacity="0.45" stroke-width="1.5"/>
+  </g>
+</svg>

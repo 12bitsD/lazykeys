@@ -17,7 +17,7 @@ _Learn LazyVim in context: Chinese command search, a non-intrusive overlay, and 
 
 ## 下载
 
-前往 **[最新 Release](https://github.com/12bitsD/lazykeys/releases/latest)**，选择适合你使用方式的包：
+<img src="docs/assets/icons/download.svg" width="24" height="24" alt=""> 前往 **[最新 Release](https://github.com/12bitsD/lazykeys/releases/latest)**，选择适合你使用方式的包：
 
 - **`LazyKeys_<version>_arm64.dmg`**：推荐。打开后将 LazyKeys 拖入“应用程序”。
 - **`LazyKeys_<version>_arm64.app.zip`**：直接 App 包。解压后将 `LazyKeys.app` 移入“应用程序”。
@@ -43,6 +43,8 @@ _Learn LazyVim in context: Chinese command search, a non-intrusive overlay, and 
 </table>
 
 ## 第一次使用
+
+<img src="docs/assets/lazykeys-workflow.svg" alt="启动环境、输入前缀、中文查询、复制或执行：LazyKeys 的四步使用流程" width="1120" height="260">
 
 1. **安装并启动 LazyKeys**，点击“一键安装并启动”。应用会检查依赖，为默认 Profile 准备 LazyVim，并在 Terminal 中启动 Neovim。
 2. **回到 Neovim 输入前缀**，例如按下 `<leader>` 后稍停。浮窗会跟随当前上下文；也可以随时打开主窗口的“命令词典”。

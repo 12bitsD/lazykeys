@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "phase": "bound",
+  "intent": "LazyKeys 从启动受管 Neovim 到复制或确认执行命令的四步操作流程图",
+  "canvas": {
+    "viewBox": [0, 0, 1120, 260],
+    "background": "deep warm charcoal with restrained sage illumination"
+  },
+  "art_direction": {
+    "description": "Four precise keycaps connected by quiet directional strokes, with clear editorial typography and restrained hand-drawn accents",
+    "mood": "welcoming, precise, quietly playful",
+    "rendering": "editable vector illustration with dimensional keycap materials",
+    "material": "matte charcoal keycaps, sage accents, subtle blue secondary cues",
+    "detail": "titles and shortcut labels remain legible at README width"
+  },
+  "palette": {
+    "background": "#171817",
+    "surface": "#272b25",
+    "accent": "#a6d189",
+    "secondary": "#8bb9e8",
+    "text": "#ecebe4",
+    "muted": "#a2a69a"
+  },
+  "elements": [
+    {"id": "background", "role": "quiet brand field and border", "tag": "g", "parent": null},
+    {"id": "connector-1", "role": "progress from install to prefix", "tag": "g", "parent": null},
+    {"id": "connector-2", "role": "progress from prefix to query", "tag": "g", "parent": null},
+    {"id": "connector-3", "role": "progress from query to execute", "tag": "g", "parent": null},
+    {"id": "step-install", "role": "first action: install and launch the managed Neovim profile", "tag": "g", "parent": null},
+    {"id": "step-prefix", "role": "second action: type a prefix such as leader and allow context to appear", "tag": "g", "parent": null},
+    {"id": "step-query", "role": "third action: open Chinese command search with Control Option K", "tag": "g", "parent": null},
+    {"id": "step-execute", "role": "fourth action: copy keys or execute after reading the risk confirmation", "tag": "g", "parent": null},
+    {"id": "ornaments", "role": "sparse hand-drawn underline and small registration marks reinforcing the flow", "tag": "g", "parent": null}
+  ],
+  "constraints": [
+    "Keep the four steps in the actual product workflow order",
+    "Do not repeat the mascot or main logo",
+    "Use one light direction and the existing sage and blue palette",
+    "Keep text live and editable, with Avenir Next for titles and SF Mono for shortcuts",
+    "Keep the plain-text quick start in README as the accessible alternative"
+  ],
+  "assumptions": [
+    "The illustration supplements rather than replaces the existing numbered instructions"
+  ]
+}
