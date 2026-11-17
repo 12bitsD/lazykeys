@@ -166,41 +166,12 @@
         letter-spacing: 0;
       }
 
-      .shortcut {
-        display: grid;
-        grid-template-columns: repeat(3, 48px);
-        gap: 8px;
-        margin: 36px 10px 0 auto;
-        transform: rotate(-2deg);
-      }
-
-      .shortcut kbd {
-        display: grid;
-        width: 48px;
-        height: 48px;
-        place-items: center;
-        border: 1px solid #4d5548;
-        border-radius: 11px;
-        color: #c9cec0;
-        background: linear-gradient(155deg, #2c3129, #20241e);
-        box-shadow:
-          inset 1px 1px 0 #ffffff10,
-          inset 0 -4px 7px #0d100c4d,
-          0 3px 0 #11140f,
-          0 7px 12px #00000038;
-        font-family: var(--mono);
-        font-size: 19px;
-        font-weight: 500;
-      }
-
-      .shortcut-label {
-        grid-column: 1 / -1;
-        margin-top: 9px;
-        color: #7f8778;
-        font-family: var(--mono);
-        font-size: 9px;
-        letter-spacing: 1.8px;
-        text-align: center;
+      .mascot {
+        width: 256px;
+        height: 256px;
+        margin: 0 0 0 auto;
+        object-fit: contain;
+        filter: drop-shadow(0 12px 14px #00000038);
       }
 
       .icon {
@@ -272,10 +243,7 @@
           <p class="product">Lazy<span>Keys</span></p>
           <p class="tagline">边用边懂 · <strong>LazyVim</strong> 即时语义助手</p>
         </div>
-        <div class="shortcut">
-          <kbd>⌃</kbd><kbd>⌥</kbd><kbd>K</kbd>
-          <span class="shortcut-label">QUERY IN CONTEXT</span>
-        </div>
+        <img class="mascot" src="lazykeys-mascot.svg" alt="">
       </section>
       <section class="icon" id="icon" aria-hidden="true">
         <div class="keys">

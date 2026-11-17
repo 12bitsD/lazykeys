@@ -54,6 +54,7 @@ jobs:
           key: release-aarch64-apple-darwin
       - run: npm ci
       - run: npm test
+      - run: command -v nvim || brew install neovim
       - run: cargo test --manifest-path src-tauri/Cargo.toml --locked
       - run: npm run tauri build -- --target aarch64-apple-darwin
       - run: bash scripts/package-macos.sh "$VERSION"

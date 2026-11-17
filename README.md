@@ -27,12 +27,20 @@ _Learn LazyVim in context: Chinese command search, a non-intrusive overlay, and 
 
 ## 主要功能
 
-- **看懂当前操作现场**：跟随 Neovim 模式、未完成前缀和插件页面，显示下一步、退出方式与分段助记；浮窗不抢焦点，支持置顶和鼠标穿透。
-- **用中文查命令**：按功能、真实按键、别名或助记搜索，查看用途、模式、结果与副作用；可为内置命令保存自己的中文别名和助记。
-- **复制或安全执行**：复制真实按键说明，或发送到当前 Neovim；修改类操作可要求确认，破坏性操作始终需要确认。
-- **独立管理 LazyVim 环境**：通过 `NVIM_APPNAME` 隔离 Profile，不修改现有 `~/.config/nvim`；支持安装、启动、复制、重命名、回滚和导出。
-- **按你的习惯工作**：自定义查询与浮窗快捷键、显示策略、字号、透明度、宽度和结果显示时长。
-- **尊重本地隐私**：查询在本地完成，不使用全局键盘监听；Insert 文本、命令参数和搜索内容不会发送或保存。
+<table>
+  <tr>
+    <td width="50%"><img src="docs/assets/icons/context.svg" width="24" height="24" alt=""> <strong>看懂当前操作现场</strong><br>跟随 Neovim 模式、未完成前缀和插件页面，显示下一步、退出方式与分段助记；浮窗不抢焦点，支持置顶和鼠标穿透。</td>
+    <td width="50%"><img src="docs/assets/icons/search.svg" width="24" height="24" alt=""> <strong>用中文查命令</strong><br>按功能、真实按键、别名或助记搜索，查看用途、模式、结果与副作用；可为内置命令保存自己的中文别名和助记。</td>
+  </tr>
+  <tr>
+    <td><img src="docs/assets/icons/execute.svg" width="24" height="24" alt=""> <strong>复制或安全执行</strong><br>复制真实按键说明，或发送到当前 Neovim；修改类操作可要求确认，破坏性操作始终需要确认。</td>
+    <td><img src="docs/assets/icons/profiles.svg" width="24" height="24" alt=""> <strong>独立管理 LazyVim 环境</strong><br>通过 <code>NVIM_APPNAME</code> 隔离 Profile，不修改现有 <code>~/.config/nvim</code>；支持安装、启动、复制、重命名、回滚和导出。</td>
+  </tr>
+  <tr>
+    <td><img src="docs/assets/icons/settings.svg" width="24" height="24" alt=""> <strong>按你的习惯工作</strong><br>自定义查询与浮窗快捷键、显示策略、字号、透明度、宽度和结果显示时长。</td>
+    <td><img src="docs/assets/icons/privacy.svg" width="24" height="24" alt=""> <strong>尊重本地隐私</strong><br>查询在本地完成，不使用全局键盘监听；Insert 文本、命令参数和搜索内容不会发送或保存。</td>
+  </tr>
+</table>
 
 ## 第一次使用
 
@@ -81,7 +89,7 @@ npm run tauri build -- --target aarch64-apple-darwin
 bash scripts/package-macos.sh 0.1.0
 ```
 
-品牌源文件使用纯 HTML/CSS，位于 `docs/assets/lazykeys-logo.html`；`scripts/generate_brand_assets.py` 使用 Pillow 为渲染结果添加可复现的手绘装饰，不参与 App 构建。
+品牌源文件使用纯 HTML/CSS，位于 `docs/assets/lazykeys-logo.html`；`scripts/generate_brand_assets.py` 使用 Pillow 为渲染结果添加可复现的手绘装饰，不参与 App 构建。看板娘与功能图标保留为可编辑 SVG，位于 `docs/assets/lazykeys-mascot.svg` 和 `docs/assets/icons/`。
 
 ## 发布
 

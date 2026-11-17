@@ -80,8 +80,8 @@ def decorate_banner(base):
     stroke(arc_points((46, 48, 332, 300), 18, 102), GREEN, 2)
     stroke([(414, 283), (520, 286), (632, 284), (744, 287), (866, 283)], BLUE, 2)
     stroke([(416, 290), (524, 292), (634, 290)], (139, 185, 232, 85), 1)
-    stroke(arc_points((1002, 107, 1160, 248), 210, 322), MUTED, 2)
-    stroke([(1054, 252), (1080, 258), (1112, 253)], MUTED, 2)
+    stroke(arc_points((952, 42, 1164, 304), 205, 320), MUTED, 2)
+    stroke([(1040, 319), (1070, 323), (1100, 318)], MUTED, 2)
     four_point_mark(draw, 1090 * scale, 72 * scale, 12 * scale, GREEN, 2 * scale, rng)
     four_point_mark(draw, 365 * scale, 64 * scale, 7 * scale, BLUE, 1.5 * scale, rng)
 

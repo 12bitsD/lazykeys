@@ -33,5 +33,6 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: cargo fmt --manifest-path src-tauri/Cargo.toml --check
+      - run: command -v nvim || brew install neovim
       - run: cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
       - run: cargo test --manifest-path src-tauri/Cargo.toml --locked
