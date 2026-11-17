@@ -187,7 +187,7 @@ fn begin_shortcut_capture(app: AppHandle) -> Result<(), String> {
 #[tauri::command]
 fn end_shortcut_capture(app: AppHandle) -> Result<(), String> {
     let state = app.state::<AppState>();
-    let Ok(previous) = state.shortcut_capture_depth.fetch_update(
+    let Ok(previous) = state.shortcut_capture_depth.try_update(
         Ordering::SeqCst,
         Ordering::SeqCst,
         |depth| depth.checked_sub(1),
