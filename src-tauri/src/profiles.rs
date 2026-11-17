@@ -1609,9 +1609,11 @@ mod tests {
         store
             .write_manifest(&ProfileConfig::default(), ManifestStatus::Pending)
             .unwrap();
-        let mut settings = AppSettings::default();
-        settings.opacity = 72;
-        settings.query_shortcut = "Control+Option+L".into();
+        let settings = AppSettings {
+            opacity: 72,
+            query_shortcut: "Control+Option+L".into(),
+            ..Default::default()
+        };
         store.save_app_settings(&settings).unwrap();
         store.set_default("default").unwrap();
         let loaded = store.app_settings().unwrap();
@@ -1661,8 +1663,10 @@ mod tests {
     #[test]
     fn invalid_shortcut_is_rejected_without_replacing_settings() {
         let (_temp, store) = store();
-        let mut settings = AppSettings::default();
-        settings.opacity = 72;
+        let mut settings = AppSettings {
+            opacity: 72,
+            ..Default::default()
+        };
         store.save_app_settings(&settings).unwrap();
         settings.query_shortcut = "not a valid shortcut !!!".into();
         assert!(store.save_app_settings(&settings).is_err());

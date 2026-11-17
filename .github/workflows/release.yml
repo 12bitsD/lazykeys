@@ -1,0 +1,97 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to build (for example v0.1.0)
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  build:
+    runs-on: macos-14
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - name: Verify release version
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]
+          VERSION=$(node -p "require('./package.json').version")
+          export VERSION
+          [[ "$RELEASE_TAG" == "v$VERSION" ]] || { echo "tag $RELEASE_TAG does not match package.json $VERSION" >&2; exit 1; }
+          node -e 'const fs = require("node:fs"); const config = JSON.parse(fs.readFileSync("src-tauri/tauri.conf.json", "utf8")); if (config.version !== process.env.VERSION) throw new Error("tauri.conf.json version mismatch");'
+          CARGO_VERSION=$(cargo metadata --manifest-path src-tauri/Cargo.toml --no-deps --format-version 1 | node -e 'let input = ""; process.stdin.on("data", chunk => input += chunk).on("end", () => console.log(JSON.parse(input).packages[0].version));')
+          [[ "$CARGO_VERSION" == "$VERSION" ]] || { echo "Cargo.toml version $CARGO_VERSION does not match $VERSION" >&2; exit 1; }
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable
+        with:
+          toolchain: stable
+          targets: aarch64-apple-darwin
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          workspaces: src-tauri
+          key: release-aarch64-apple-darwin
+      - run: npm ci
+      - run: npm test
+      - run: cargo test --manifest-path src-tauri/Cargo.toml --locked --target aarch64-apple-darwin
+      - run: npm run tauri build -- --target aarch64-apple-darwin
+      - run: bash scripts/package-macos.sh "$VERSION"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: macos-arm64-${{ env.RELEASE_TAG }}
+          path: release/
+          if-no-files-found: error
+          retention-days: 5
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: macos-arm64-*
+          path: release
+      - run: cd release && sha256sum -c SHA256SUMS.txt
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: LazyKeys ${{ env.RELEASE_TAG }}
+          body: |
+            Lightweight LazyVim command companion for **macOS Apple Silicon (arm64)**.
+
+            - `LazyKeys_<version>_arm64.dmg`: recommended installer.
+            - `LazyKeys_<version>_arm64.app.zip`: standalone `LazyKeys.app` bundle.
+            - `SHA256SUMS.txt`: SHA-256 checksums for both packages.
+
+            This build is not signed with an Apple Developer ID or notarized. On first launch, confirm the download source and use Finder → right-click → Open.
+          generate_release_notes: true
+          prerelease: ${{ contains(env.RELEASE_TAG, '-') }}
+          make_latest: ${{ !contains(env.RELEASE_TAG, '-') }}
+          fail_on_unmatched_files: true
+          files: |
+            release/*.dmg
+            release/*.zip
+            release/SHA256SUMS.txt

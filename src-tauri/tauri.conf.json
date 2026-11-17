@@ -25,7 +25,10 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["app", "dmg"],
+    "copyright": "Copyright © 2026 0H (12bitsD)",
+    "category": "DeveloperTool",
+    "shortDescription": "LazyVim command companion for macOS",
     "resources": {
       "../companion/lazykeys.nvim": "lazykeys.nvim"
     },
@@ -33,8 +36,7 @@
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/icon.icns"
     ]
   }
 }

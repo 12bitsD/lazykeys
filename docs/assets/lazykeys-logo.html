@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LazyKeys 品牌标志</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #151714;
+        --surface: #242822;
+        --text: #ecebe4;
+        --muted: #a2a69a;
+        --accent: #a6d189;
+        --blue: #8bb9e8;
+        --display: "Avenir Next", Futura, "PingFang SC", sans-serif;
+        --mono: "SF Mono", "SFNSMono", Menlo, monospace;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: transparent;
+        font-family: var(--display);
+      }
+
+      main { display: grid; gap: 80px; width: max-content; }
+      main:has(#icon:target) { display: block; }
+      main:has(#icon:target) #banner { display: none; }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .banner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 1200px;
+        height: 360px;
+        padding: 64px 72px;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse at 18% -10%, #35432c66 0, transparent 48%),
+          linear-gradient(118deg, #1b1e19 0%, var(--bg) 58%, #121411 100%);
+      }
+
+      .keys {
+        position: relative;
+        flex: 0 0 auto;
+        width: 210px;
+        height: 190px;
+      }
+
+      .key {
+        position: absolute;
+        display: grid;
+        place-items: center;
+        border: 1px solid #687260;
+        color: var(--text);
+        background:
+          linear-gradient(145deg, #ffffff0c 0%, transparent 26%),
+          linear-gradient(155deg, #33382f 0%, #272b25 48%, #20241f 100%);
+        box-shadow:
+          inset 1px 1px 0 #ffffff16,
+          inset -2px -2px 0 #00000038,
+          inset 0 -9px 14px #0d100c4d,
+          0 2px 0 #4b5345,
+          0 6px 0 #11140f,
+          0 13px 22px #0000004d;
+        font-family: var(--display);
+        font-weight: 600;
+        line-height: 1;
+        text-shadow: 0 1px 0 #ffffff14;
+      }
+
+      .key::before {
+        position: absolute;
+        inset: 7px;
+        border: 1px solid #ffffff0d;
+        border-bottom-color: #00000038;
+        border-radius: inherit;
+        box-shadow: inset 0 2px 5px #00000026;
+        content: "";
+      }
+
+      .key::after {
+        position: absolute;
+        top: 3px;
+        right: 13%;
+        left: 13%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #e9f2df38, transparent);
+        content: "";
+      }
+
+      .key-l {
+        top: 7px;
+        left: 1px;
+        width: 108px;
+        height: 108px;
+        border-color: #657a55;
+        border-radius: 22px;
+        color: var(--accent);
+        background:
+          linear-gradient(145deg, #f2ffdf10 0%, transparent 28%),
+          linear-gradient(155deg, #3a4a30 0%, #2d3b26 52%, #232e1e 100%);
+        box-shadow:
+          inset 1px 1px 0 #e4ffd21a,
+          inset -2px -2px 0 #10180c42,
+          inset 0 -9px 14px #111a0d55,
+          0 2px 0 #536647,
+          0 6px 0 #131c10,
+          0 13px 22px #0000004d;
+        font-size: 47px;
+        transform: rotate(-4deg);
+      }
+
+      .key-k {
+        right: 2px;
+        bottom: 7px;
+        width: 124px;
+        height: 124px;
+        border-radius: 26px;
+        font-size: 58px;
+        transform: rotate(2deg);
+      }
+
+      .wordmark { margin-left: 42px; }
+
+      .product {
+        margin: 0;
+        color: var(--text);
+        font-family: var(--display);
+        font-size: 82px;
+        font-weight: 600;
+        letter-spacing: -4.4px;
+        line-height: 1;
+      }
+
+      .product span { color: var(--accent); }
+
+      .tagline {
+        margin: 20px 0 0 2px;
+        color: var(--muted);
+        font-family: var(--display);
+        font-size: 22px;
+        font-weight: 400;
+        letter-spacing: 1.4px;
+      }
+
+      .tagline strong {
+        color: var(--blue);
+        font-family: var(--mono);
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0;
+      }
+
+      .shortcut {
+        display: grid;
+        grid-template-columns: repeat(3, 48px);
+        gap: 8px;
+        margin: 36px 10px 0 auto;
+        transform: rotate(-2deg);
+      }
+
+      .shortcut kbd {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        border: 1px solid #4d5548;
+        border-radius: 11px;
+        color: #c9cec0;
+        background: linear-gradient(155deg, #2c3129, #20241e);
+        box-shadow:
+          inset 1px 1px 0 #ffffff10,
+          inset 0 -4px 7px #0d100c4d,
+          0 3px 0 #11140f,
+          0 7px 12px #00000038;
+        font-family: var(--mono);
+        font-size: 19px;
+        font-weight: 500;
+      }
+
+      .shortcut-label {
+        grid-column: 1 / -1;
+        margin-top: 9px;
+        color: #7f8778;
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 1.8px;
+        text-align: center;
+      }
+
+      .icon {
+        position: relative;
+        width: 1024px;
+        height: 1024px;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse at 16% -8%, #425437 0, transparent 44%),
+          linear-gradient(135deg, #20241d 0%, var(--bg) 64%, #11130f 100%);
+      }
+
+      .icon .keys {
+        position: absolute;
+        top: 222px;
+        left: 190px;
+        width: 644px;
+        height: 560px;
+      }
+
+      .icon .key::before { inset: 22px; }
+      .icon .key::after { top: 9px; height: 3px; }
+
+      .icon .key-l {
+        top: 0;
+        left: 0;
+        width: 348px;
+        height: 348px;
+        border-width: 3px;
+        border-radius: 72px;
+        box-shadow:
+          inset 3px 3px 0 #e4ffd21a,
+          inset -6px -6px 0 #10180c42,
+          inset 0 -28px 42px #111a0d55,
+          0 7px 0 #536647,
+          0 19px 0 #131c10,
+          0 40px 66px #0000004d;
+        font-size: 154px;
+      }
+
+      .icon .key-k {
+        right: 0;
+        bottom: 0;
+        width: 392px;
+        height: 392px;
+        border-width: 3px;
+        border-radius: 82px;
+        box-shadow:
+          inset 3px 3px 0 #ffffff16,
+          inset -6px -6px 0 #00000038,
+          inset 0 -28px 42px #0d100c4d,
+          0 7px 0 #4b5345,
+          0 19px 0 #11140f,
+          0 40px 66px #0000004d;
+        font-size: 184px;
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="LazyKeys 品牌标志源文件">
+      <!-- 2026-11-18：用户指出初版材质、图案和字体不够精致；改为统一几何字形、精密键帽与克制的批注。 -->
+      <h1 class="visually-hidden">LazyKeys 品牌标志</h1>
+      <section class="banner" id="banner" aria-hidden="true">
+        <div class="keys">
+          <div class="key key-l">L</div>
+          <div class="key key-k">K</div>
+        </div>
+        <div class="wordmark">
+          <p class="product">Lazy<span>Keys</span></p>
+          <p class="tagline">边用边懂 · <strong>LazyVim</strong> 即时语义助手</p>
+        </div>
+        <div class="shortcut">
+          <kbd>⌃</kbd><kbd>⌥</kbd><kbd>K</kbd>
+          <span class="shortcut-label">QUERY IN CONTEXT</span>
+        </div>
+      </section>
+      <section class="icon" id="icon" aria-hidden="true">
+        <div class="keys">
+          <div class="key key-l">L</div>
+          <div class="key key-k">K</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

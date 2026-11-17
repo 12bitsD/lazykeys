@@ -946,7 +946,6 @@ pub fn run() {
         app_state.settings.lock().expect("settings lock").clone();
     tauri::Builder::default()
         .plugin(global_shortcut_plugin(&initial_settings))
-        .plugin(tauri_plugin_opener::init())
         .manage(app_state)
         .invoke_handler(command_handler())
         .setup(move |app| {
@@ -978,8 +977,10 @@ mod tests {
             state.profiles.app_settings().unwrap().default_profile,
             "renamed"
         );
-        let mut other = ProfileConfig::default();
-        other.id = "other".into();
+        let other = ProfileConfig {
+            id: "other".into(),
+            ..Default::default()
+        };
         state.profiles.create(other).unwrap();
         rename_profile_state(&state, "other", "other-new", "其他").unwrap();
         assert_eq!(state.settings.lock().unwrap().default_profile, "renamed");
@@ -987,8 +988,10 @@ mod tests {
 
     #[test]
     fn backend_confirmation_never_disables_destructive_actions() {
-        let mut settings = AppSettings::default();
-        settings.confirm_edits = false;
+        let mut settings = AppSettings {
+            confirm_edits: false,
+            ..Default::default()
+        };
         assert!(!requires_execution_confirmation(RiskLevel::Read, &settings));
         assert!(!requires_execution_confirmation(RiskLevel::Edit, &settings));
         assert!(requires_execution_confirmation(

@@ -1284,8 +1284,10 @@ mod tests {
 
     #[test]
     fn semantic_hides_completed_input_only_when_history_is_disabled() {
-        let mut settings = AppSettings::default();
-        settings.show_history = false;
+        let mut settings = AppSettings {
+            show_history: false,
+            ..Default::default()
+        };
         assert!(semantic_is_hidden(
             PassiveDisplay::Expanded,
             &settings,
@@ -1315,8 +1317,10 @@ mod tests {
 
     #[test]
     fn query_target_hides_cwd_only_when_requested() {
-        let mut settings = AppSettings::default();
-        settings.include_cwd = false;
+        let mut settings = AppSettings {
+            include_cwd: false,
+            ..Default::default()
+        };
         assert_eq!(
             query_target_text(
                 "default",

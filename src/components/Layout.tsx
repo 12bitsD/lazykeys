@@ -33,7 +33,7 @@ export function Sidebar({ tab, context, onSelect }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="brand">
-        <span className="brand-mark">LK</span>
+        <img className="brand-mark" src="/favicon.png" alt="" />
         <div><strong>LazyKeys</strong><span>边用边懂</span></div>
       </div>
       <nav aria-label="主导航">
